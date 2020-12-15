@@ -2,16 +2,22 @@ import React from "react";
 import { Button, Dropdown, Menu } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import PARTS from "components/constructorParts";
+import useParts from "hooks/useParts";
 
-const menu = () => {
+const MenuOverlay = () => {
+    const { addNewPart } = useParts();
     return (
         <Menu>
             {
                 Object.keys(PARTS).map((key) => {
                     const { icon, label } = PARTS[key];
-                    return <Menu.Item key={key} icon={icon} onClick={() => console.log("asdasd", key)}>
+                    return <Menu.Item
+                        key={key}
+                        icon={icon}
+                        onClick={() => addNewPart(key)}>
                         {label}
-                    </Menu.Item>;
+                    </Menu.Item>
+
                 })
             }
         </Menu>
@@ -19,7 +25,7 @@ const menu = () => {
 };
 const NewPart = () => {
     return <div>
-        <Dropdown overlay={menu}>
+        <Dropdown overlay={<MenuOverlay />}>
             <Button icon={<PlusOutlined/>}/>
         </Dropdown>
     </div>;

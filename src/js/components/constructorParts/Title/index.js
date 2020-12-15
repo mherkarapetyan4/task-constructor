@@ -1,10 +1,12 @@
 import React, {useState} from "react";
 import {Typography, Input} from 'antd';
-
+// import PropTypes from 'prop-types'
 const { Title: AntTitle} = Typography;
 
-const Title = () => {
+const Title = (props) => {
+    const {id}  = props;
     const [ title, setTitle ] = useState('');
+    console.log( id)
     return <div>
         <AntTitle>{title}</AntTitle>
         <br />
@@ -12,4 +14,9 @@ const Title = () => {
     </div>;
 };
 
+// Title.propTypes = {
+//     id: PropTypes.string
+// }
+
 export default Title;
+

@@ -6,7 +6,7 @@ const parts = {
     title: {
         label: "Заголовок",
         icon: <FileTextTwoTone />,
-        component: <Title/>,
+        component: Title,
     },
 };
 

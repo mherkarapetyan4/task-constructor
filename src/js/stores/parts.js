@@ -1,11 +1,11 @@
 import { createContext } from "react";
-import { action, observable, runInAction } from "mobx";
+import { action, observable } from "mobx";
 
 class Parts {
     @observable parts = [];
     @action
-    getProjects = () => {
-
+    addNewPart = (part) => {
+        this.parts = [...this.parts, part];
     };
     // @action
     // setProject = (project = {}) => {
