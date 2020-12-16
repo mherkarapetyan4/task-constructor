@@ -1,0 +1,24 @@
+.PartActionsWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.leftBar {
+    display: flex;
+    margin-right: 10px;
+}
+
+.leftBar > div {
+    margin-right: 3px;
+    cursor: pointer;
+}
+
+
+.action-wrapper {
+    padding: 2px 5px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+    background: darkgray;
+}

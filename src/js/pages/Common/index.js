@@ -1,30 +1,17 @@
-import React, { useContext } from "react";
-import { observer } from "mobx-react-lite";
+import React from "react";
 
 import NewPart from "components/NewPart";
-import { PartsStoreContext } from "stores/parts";
-import CONSTRUCTOR_PARTS from 'components/constructorParts';
 
-const Common = observer(() => {
-    const {parts} = useContext(PartsStoreContext);
-    const renderParts = () => {
-        console.log("working renderParts");
+// import DraggableElement from "../../components/dnd";
+import { DragAndDrop } from "../../containers/DragAndDrop";
 
-        return <div>
-            {
-                parts.map((part, i) => {
-                    const Component = CONSTRUCTOR_PARTS[part.componentType].component;
-                    return  <Component  key={i} id={i} />
-                })
-            }
-        </div>
-    }
+const Common = () => {
     return (
         <div>
-            {renderParts()}
-           <NewPart />
+            <DragAndDrop/>
+            <NewPart/>
         </div>
     );
-});
+}
 
 export default Common;

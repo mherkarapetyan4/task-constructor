@@ -1,43 +1,68 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import { observer } from "mobx-react-lite";
-
-import DroppableColumn from "components/Dnd/DroppableColumn";
-import { ProjectsStoreContext } from "stores/projects";
-import { TasksStoreContext } from "stores/tasks";
+import { Popover } from "antd";
+import { PartsStoreContext } from "stores/parts";
+import CONSTRUCTOR_PARTS from "components/constructorParts";
+import DraggableElement from "components/dnd";
+import PartActions from "components/PartActions";
 
 const DragAndDrop = observer(() => {
-    const ProjectsStore = useContext(ProjectsStoreContext);
-    const TasksStore = useContext(TasksStoreContext);
-
-    useEffect(() => {
-        TasksStore.getProjectTasks(ProjectsStore.selectedProject);
-    }, []);
-
+    const PartsStore = useContext(PartsStoreContext);
     return (
         <DndProvider backend={Backend}>
-            <Wrapper>
-                {TasksStore.tasks.map((el, index) => {
-                    return (
-                        <DroppableColumn
-                            key={el.id}
-                            dropColumnIndex={index}
-                            dropColumnId={el.id}
-                            tasks={el.items}
-                            header={TasksStore.getStatusById(el.id).value}
-                            onDropTask={TasksStore.onDropTask}
-                            onDragTask={TasksStore.onDragTask}
-                            setCurrentDraggable={TasksStore.setCurrentDraggable}
-                            setIsSwitching={TasksStore.setIsSwitching}
-                            isSwitching={TasksStore.isSwitching}
-                        />
-                    );
-                })}
-            </Wrapper>
+            <div>
+                {
+                    PartsStore.parts.map((part, i) => {
+                        const { component, icon } = CONSTRUCTOR_PARTS[part.componentType];
+                        const Component = component;
+                        const values = PartsStore.parts[i];
+                        return <DraggableElement
+                            key={part.id}
+                            part={part}
+                            setCurrentDraggable={PartsStore.setCurrentDraggable}
+                            // onDragPart={PartsStore.onDragPart}
+                            onDropPart={PartsStore.onDropPart}
+                            editable={part.editable}
+                        >
+                            <div> {
+                                part.editable ? <div>
+                                    <Component  {...values}/>
+                                </div> : <Popover
+                                    content={
+                                        <PartActions
+                                            mainIcon={icon}
+                                            moveDownHandler={() => PartsStore.moveHandler(i, false)}
+                                            addNewPart={() => {
+                                                PartsStore.addToPartsWithIndex(i);
+                                            }}
+                                            moveUpHandler={() => PartsStore.moveHandler(i, true)}
+                                            copyHandler={() => {
+                                                PartsStore.copyHandler(i);
+                                            }}
+                                            deleteHandler={() => {
+                                                PartsStore.deleteHandler(i);
+                                            }}
+                                            editHandler={() => PartsStore.makeEditable(i, true)}
+                                        />}
+                                    placement={"rightTop"}
+                                    trigger="click"
+                                >
+                                    <div>
+                                        <Component  {...values}/>
+                                    </div>
+                                </Popover>
+                            }
+
+                            </div>
+
+                        </DraggableElement>;
+                    })
+                }
+            </div>
         </DndProvider>
     );
 });
-
 
 export { DragAndDrop };

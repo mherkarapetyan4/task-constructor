@@ -1,22 +1,33 @@
-import React, {useState} from "react";
-import {Typography, Input} from 'antd';
-// import PropTypes from 'prop-types'
-const { Title: AntTitle} = Typography;
+import React, { useEffect, useMemo, useState } from "react";
+import { Typography, Input } from "antd";
+import useParts from "hooks/useParts";
 
-const Title = (props) => {
-    const {id}  = props;
-    const [ title, setTitle ] = useState('');
-    console.log( id)
+const { Title: AntTitle } = Typography;
+
+// const keys = ['title']
+const Title = ({ id, editable }) => {
+    const { changePart, parts } = useParts();
+
+    const FOUNDED = useMemo(() => {
+        return parts.find(el => el.id === id);
+    }, [id, parts]);
+    const [title, setTitle] = useState(FOUNDED["title"]);
+
+    useEffect(() => {
+        if (title !== FOUNDED.title) {
+            changePart(id, { title });
+        }
+        return () => {
+        };
+    }, [title, id]);
     return <div>
-        <AntTitle>{title}</AntTitle>
-        <br />
-        <Input placeholder={'title'}  onBlur={e => setTitle(e.target.value)} />
+        {
+            editable ?
+                <Input placeholder={"Заголовок"} onBlur={e => setTitle(e.target.value)}/>
+                :
+                <AntTitle>{title}</AntTitle>
+        }
     </div>;
 };
 
-// Title.propTypes = {
-//     id: PropTypes.string
-// }
-
 export default Title;
-

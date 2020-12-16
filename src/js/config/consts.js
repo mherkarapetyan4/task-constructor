@@ -1,3 +1,6 @@
 export const TYPES = {
-    title: {title: ""}
+    title: {title: "Заголовок"},
+    text: {text: "Текст"},
+    image: {url: ""},
+    slider: {urls: []}
 }
