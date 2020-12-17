@@ -14,7 +14,7 @@ class Parts {
     @action
     addToPartsWithIndex = (index) => {
         const obj = this.parts[index];
-        this.parts.splice(index + 1, 0, makeObj(TYPES[obj.componentType]));
+        this.parts.splice(index + 1, 0, makeObj(obj.componentType, TYPES[obj.componentType]));
     };
     @action
     changePart = (id, obj) => {

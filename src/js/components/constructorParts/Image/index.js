@@ -1,23 +1,29 @@
 import React, { useMemo, useState } from "react";
-import { Button, Image as AntImage, Upload } from "antd";
+import { Button, Col, Image as AntImage, Row, Upload } from "antd";
 import useParts from "hooks/useParts";
 import { PlusOutlined } from "@ant-design/icons";
 
 
 // const keys = ['url']
 
-const uploadButton = (
+export const uploadButton = (
     <div>
         <PlusOutlined/>
         <div style={{ marginTop: 8 }}>Upload</div>
     </div>
 );
 
-function getBase64(img, callback) {
+export function getBase64(img, callback) {
     const reader = new FileReader();
     reader.addEventListener("load", () => callback(reader.result));
     reader.readAsDataURL(img);
 }
+
+export const dummyRequest = ({ onSuccess }) => {
+    setTimeout(() => {
+        onSuccess("ok");
+    }, 0);
+};
 
 const Image = ({ id, editable }) => {
     const { changePart, parts } = useParts();
@@ -36,15 +42,11 @@ const Image = ({ id, editable }) => {
             );
         }
     };
-    const dummyRequest = ({ onSuccess }) => {
-        setTimeout(() => {
-            onSuccess("ok");
-        }, 0);
-    };
-    return <div>
+
+    return <Row justify={"center"}>
         {
             editable ?
-                <>
+                <Col xl={12}>
                     <Upload
                         name="avatar" listType="picture-card"
                         onChange={handleChange}
@@ -54,16 +56,14 @@ const Image = ({ id, editable }) => {
                         {image.url ? <img src={image.url} alt="avatar" style={{ width: "100%" }}/> : uploadButton}
                     </Upload>
                     <Button onClick={() => {
-                        if (image.url !== FOUNDED.url) {
                             changePart(id, { url: image.url });
-                        }
                     }
                     }>Сохранить</Button>
-                </>
+                </Col>
                 :
-                <AntImage preview={false} src={image.url} width={800} fallback={"https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fmoorestown-mall.com%2Fnoimage.gif&f=1&nofb=1"}/>
+                <AntImage preview={false} src={image.url} width={300} fallback={"https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fmoorestown-mall.com%2Fnoimage.gif&f=1&nofb=1"}/>
         }
-    </div>;
+    </Row>;
 };
 
 export default Image;

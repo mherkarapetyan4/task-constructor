@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Typography, Input } from "antd";
+import React, { useMemo, useState } from "react";
+import { Typography, Input, Button, Col, Row } from "antd";
 import useParts from "hooks/useParts";
 
 const { Title: AntTitle } = Typography;
@@ -13,21 +13,22 @@ const Title = ({ id, editable }) => {
     }, [id, parts]);
     const [title, setTitle] = useState(FOUNDED["title"]);
 
-    useEffect(() => {
-        if (title !== FOUNDED.title) {
-            changePart(id, { title });
-        }
-        return () => {
-        };
-    }, [title, id]);
-    return <div>
+    return <Row justify={"center"}>
         {
             editable ?
-                <Input placeholder={"Заголовок"} onBlur={e => setTitle(e.target.value)}/>
+                <Col xl={12}>
+                    <Input placeholder={"Заголовок"} onChange={e => setTitle(e.target.value)} value={title}/>
+                    <Button
+
+                        onClick={() => {
+                        changePart(id, { title });
+                    }
+                    }>Сохранить</Button>
+                </Col>
                 :
-                <AntTitle>{title}</AntTitle>
+                <Col><AntTitle>{title}</AntTitle></Col>
         }
-    </div>;
+    </Row>;
 };
 
 export default Title;

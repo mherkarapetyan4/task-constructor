@@ -3,7 +3,11 @@ import Title from "./Title";
 import Text from "./Text";
 import Image from "./Image";
 import Slider from "./Slider";
-import { FileTextTwoTone, FileImageTwoTone, SlidersTwoTone } from "@ant-design/icons";
+import Video from "./Video";
+import Audio from "./Audio";
+import Download from "./Download";
+
+import { FileTextTwoTone, FileImageTwoTone, SlidersTwoTone, VideoCameraTwoTone, AudioTwoTone, FileAddTwoTone } from "@ant-design/icons";
 
 const styles = {
     fontSize: 20,
@@ -29,6 +33,21 @@ const parts = {
         label: "Карусель изображений",
         icon: <SlidersTwoTone style={styles}/>,
         component: Slider,
+    },
+    video: {
+        label: "Видео",
+        icon: <VideoCameraTwoTone style={styles}/>,
+        component: Video,
+    },
+    audio: {
+        label: "Аудио файл",
+        icon: <AudioTwoTone style={styles}/>,
+        component: Audio,
+    },
+    download: {
+        label: "Файл для скачивания",
+        icon: <FileAddTwoTone style={styles}/>,
+        component: Download,
     },
 };
 

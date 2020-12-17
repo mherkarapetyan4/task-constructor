@@ -1,0 +1,12 @@
+.SliderWrapper {
+    height: 500px;
+}
+
+.sliderItem {
+    /*display: ;*/
+    height: 100%;
+}
+
+.sliderItem img {
+    height: 100%;
+}

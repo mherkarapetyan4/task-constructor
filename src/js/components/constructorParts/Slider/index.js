@@ -1,23 +1,11 @@
 import React, { useMemo, useState } from "react";
-import { Button, Upload, Carousel } from "antd";
+import { Button, Carousel, Col, Row, Typography } from "antd";
 import useParts from "hooks/useParts";
 import { PlusOutlined } from "@ant-design/icons";
-
+import EditSlide from "./editSlide";
+import styles from  "./Slider.css"
 
 // const keys = ['url']
-
-const uploadButton = (
-    <div>
-        <PlusOutlined/>
-        <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-);
-
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
-}
 
 const Slider = ({ id, editable }) => {
     const { changePart, parts } = useParts();
@@ -26,68 +14,59 @@ const Slider = ({ id, editable }) => {
         return parts.find(el => el.id === id);
     }, [id, parts]);
     const [slider, setSlider] = useState(FOUNDED);
-    const [defaultFileList, setDefaultFileList] = useState([]);
-    const handleChange = info => {
-        setDefaultFileList(info.fileList);
-        if (info.file.status === "done") {
-            const urls = [];
-            console.log(info)
-            info.fileList.forEach(file => {
-                getBase64(file.originFileObj, imageUrl => {
-                        urls.push({ text: "", url: imageUrl });
-                    },
-                );
-            });
 
-            setSlider({
-                ...slider,
-                urls
-            });
-
-        }
-    };
-
-    const dummyRequest = ({ onSuccess }) => {
-        setTimeout(() => {
-            onSuccess("ok");
-        }, 0);
-    };
 
     const renderSlides = () => {
-        return slider.urls.map((el, i) => <div key={i}><img src={el.url} alt={i}/></div>);
-
+        return slider.urls.map((el, i) => <div key={i} className={styles.sliderItem}>
+            <img src={el.url} alt={i} width={'100%'}/>
+            <Typography.Title>{el.text}</Typography.Title>
+        </div>);
     };
-    console.log(defaultFileList);
     // const renderPrev
-    return <div>
-        {
-           ( editable || (!editable && !slider.urls.length)) ?
-                <>
-                    <Upload
-                        accept="image/*"
-                        name="avatar" listType="picture-card"
-                        onChange={handleChange}
-                        customRequest={dummyRequest}
-                        multiple
-                        defaultFileList={defaultFileList}
-                    >
-                        {uploadButton}
-                    </Upload>
-                    <Button onClick={() => {
-                        // if (slider.url !== FOUNDED.url) {
+    const handleChange = (url, text, index) => {
+        const buffSliders = [...slider.urls];
+        buffSliders[index] = {
+            url, text,
+        };
 
+        setSlider({ ...slider, urls: buffSliders });
+    };
+    return <Row justify={"center"} style={{background: "#ccc"}}>
+        {
+            (editable || (!editable && slider.urls.length < 1)) ?
+                <Col xl={12}>
+
+                    {
+                        slider.urls.map((el, i) => <EditSlide key={i} image={el.url} text={el.text}
+                                                              onChange={(u, t) => handleChange(u, t, i)
+                                                              }
+                                                              onDelete={() => {
+                                                                  const buffSliders = [...slider.urls];
+                                                                  buffSliders.splice(i, 1);
+                                                                  setSlider({ ...slider, urls: buffSliders });
+                                                              }
+                                                              }
+                        />)
+                    }
+
+                    <Col
+                        onClick={() => setSlider({ ...slider, urls: [...slider.urls, { text: "", url: "" }] })}>
+                        <PlusOutlined style={{ fontSize: 20 }}/>
+                    </Col>
+                    <Button onClick={() => {
                         changePart(id, { urls: slider.urls });
-                        // }
                     }
                     }>Сохранить</Button>
-                </>
+                </Col>
                 :
-                <Carousel swipeToSlide>
-                    {renderSlides()}
-                </Carousel>
+                <Col xl={12}>
+                    <Carousel swipeToSlide autoplay className={styles.SliderWrapper}>
+                        {renderSlides()}
+                    </Carousel>
+                </Col>
 
         }
-    </div>;
+    </Row>;
 };
 
 export default Slider;

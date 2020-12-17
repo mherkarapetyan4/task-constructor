@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Typography, Input, Button } from "antd";
+import { Typography, Button, Row, Col } from "antd";
 import useParts from "hooks/useParts";
 
 const { Paragraph } = Typography;
@@ -13,30 +13,25 @@ const Text = ({ id, editable }) => {
     }, [id, parts]);
     const [text, setText] = useState(FOUNDED);
 
-    // useEffect(() => {
-    //     if (text !== FOUNDED.text) {
-    //         changePart(id, { text: text.text });
-    //     }
-    //     return () => {
-    //     };
-    // }, [text, id]);
-    return <div>
-        {
-            editable ?
-                <>
+    return <Row justify={"center"}>
 
-                    <Input placeholder={"Текст"} onChange={e => setText({ ...text, text: e.target.value })}/>
-                    <Button onClick={() => {
-                        if (text.text !== FOUNDED.text) {
-                            changePart(id, { text: text.text });
-                        }
-                    }
-                    }>Сохранить</Button>
-                </>
-                :
-                <Paragraph>{text.text}</Paragraph>
-        }
-    </div>;
+        <Col xl={12}>
+            <Paragraph editable={{
+                icon: <div></div>,
+                tooltip: false,
+                editing: editable,
+                onChange: v => setText({ ...text, text: v }),
+            }}>{text.text}</Paragraph>
+            {
+                editable && <Button onClick={() => {
+                    if (text.text !== FOUNDED.text)
+                        changePart(id, { text: text.text });
+
+                }
+                }>Сохранить</Button>
+            }
+        </Col>
+    </Row>;
 };
 
 export default Text;

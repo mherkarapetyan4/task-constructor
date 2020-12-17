@@ -25,7 +25,6 @@ const actions = [
 ]
 
 const PartActions = (props) => {
-    console.log(props)
     return <div className={styles.PartActionsWrapper}>
         <div className={styles.leftBar}>
             <div>
